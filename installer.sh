@@ -1,8 +1,6 @@
-echo [+] Starting Process...
-echo [+] Installer for Subdemon.py...
-timeout /t 1
+echo "[+] Starting Process..."
+echo "[+] Installer for Subdemon.py..."
 pip install django
 pip install requests
 pip install colorama
-pause
 exit
