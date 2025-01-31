@@ -1,16 +1,14 @@
 import argparse
-from django.core.validators import URLValidator
-from django.core.exceptions import ValidationError
 import requests
 import time
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from datetime import datetime
 from colorama import Fore, init
-import os
-
-validate = URLValidator()
-
 rn = datetime.now().strftime("%D %H:%M:%S")
 rnt = datetime.now().strftime("%H:%M:%S")
+
+validate = URLValidator()
 
 def config_args():
     parser = argparse.ArgumentParser()
@@ -29,6 +27,12 @@ def config_args():
         print("Quitting....")
         time.sleep(1)
         exit()
+    if not "https://" or "http://" in args.u:
+        print(f"{Fore.YELLOW}[!]{Fore.RESET}")
+        print("Quitting....")
+        time.sleep(2)
+        exit()
+
 
     subfind(args)
     
@@ -87,7 +91,7 @@ def subfind(args):
         with open(args.w, "r") as list:
             words = [word.strip() for word in list if word.strip()]
     except Exception:
-        print(f"[-] Error occurred while reading the wordlist file {args.w}.") 
+        print(f"{Fore.RED}[-]{Fore.RESET} Error occurred while reading the wordlist file {args.w}.") 
         quit()
 
     # Subfinding
@@ -103,8 +107,8 @@ def subfind(args):
                 print(f"[{rnt}] {Fore.GREEN}[+]{Fore.RESET} Subdomain Found: {subdomain}")
             else:
                 print(f"[{rnt}] {Fore.RED}[-]{Fore.RESET} Subdomain Not Found: {subdomain}")
-        except requests.exceptions.RequestException:
-            print(f"[-] An Error occurred while forming a request to {subdomain}.")
+        except requests.exceptions.RequestException as f:
+            print(f"[{rnt}] {Fore.RED}[-]{Fore.RESET} Subdomain Not Found: {subdomain}")
         except Exception as e:
             print(f"[{rnt}] [-] An Error occurred: {e}")
             input("Press any key to exit...")
